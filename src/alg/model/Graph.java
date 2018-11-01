@@ -78,6 +78,12 @@ public class Graph implements BaseGraph
 		new HashMap<Pair<Integer,Integer>, Double>();
 	
 	/**
+     *  index for edge capacities in the graph
+     */
+    protected Map<Pair<Integer, Integer>, Double> _vertex_pair_capacity_index = 
+        new HashMap<Pair<Integer,Integer>, Double>();
+	
+	/**
 	 *  index for vertices in the graph
 	 */
 	protected Map<Integer, BaseVertex> _id_vertex_index = 
@@ -196,7 +202,13 @@ public class Graph implements BaseGraph
 					int start_vertex_id = Integer.parseInt(str_list[0]);
 					int end_vertex_id = Integer.parseInt(str_list[1]);
 					double weight = Double.parseDouble(str_list[2]);
-					add_edge(start_vertex_id, end_vertex_id, weight);
+					if (str_list.length > 3) {
+					    double capacity = Double.parseDouble(str_list[3]);
+	                    add_edge(start_vertex_id, end_vertex_id, weight, capacity);
+                    } else {
+                        add_edge(start_vertex_id, end_vertex_id, weight);
+                    }
+					
 				}
 				//
 				line = bufRead.readLine();
@@ -209,16 +221,30 @@ public class Graph implements BaseGraph
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+     * Note that this may not be used externally, because some other members in the class
+     * should be updated at the same time. Add edge capacity
+     * 
+     * @param start_vertex_id
+     * @param end_vertex_id
+     * @param weight
+     */
+    protected void add_edge(int start_vertex_id, int end_vertex_id, double weight)
+    {
+        add_edge(start_vertex_id, end_vertex_id, weight, 0);
+    }
 
 	/**
 	 * Note that this may not be used externally, because some other members in the class
-	 * should be updated at the same time. 
+	 * should be updated at the same time. Add edge capacity
 	 * 
 	 * @param start_vertex_id
 	 * @param end_vertex_id
 	 * @param weight
+	 * @param capacity 
 	 */
-	protected void add_edge(int start_vertex_id, int end_vertex_id, double weight)
+	protected void add_edge(int start_vertex_id, int end_vertex_id, double weight, double capacity)
 	{
 		// actually, we should make sure all vertices ids must be correct. 
 		if(!_id_vertex_index.containsKey(start_vertex_id)
@@ -251,6 +277,9 @@ public class Graph implements BaseGraph
 		_vertex_pair_weight_index.put(
 				new Pair<Integer, Integer>(start_vertex_id, end_vertex_id), 
 				weight);
+		_vertex_pair_capacity_index.put(
+                new Pair<Integer, Integer>(start_vertex_id, end_vertex_id), 
+                capacity);
 		
 		++_edge_num;
 	}
@@ -328,6 +357,15 @@ public class Graph implements BaseGraph
 									new Pair<Integer, Integer>(source.get_id(), sink.get_id())) 
 						  : DISCONNECTED;
 	}
+	
+	@Override
+    public double get_edge_capacity(BaseVertex source, BaseVertex sink) {
+	    return _vertex_pair_capacity_index.containsKey(
+                new Pair<Integer, Integer>(source.get_id(), sink.get_id()))? 
+                        _vertex_pair_capacity_index.get(
+                                new Pair<Integer, Integer>(source.get_id(), sink.get_id())) 
+                      : DISCONNECTED;
+    }
 
 	/**
 	 * Set the number of vertices in the graph

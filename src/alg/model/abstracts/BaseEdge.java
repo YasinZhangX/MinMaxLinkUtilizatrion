@@ -39,6 +39,7 @@ package alg.model.abstracts;
 public interface BaseEdge
 {
 	int get_weight();
+	int get_capacity();
 	
 	BaseVertex get_start_vertex();
 	BaseVertex get_end_vertex();
