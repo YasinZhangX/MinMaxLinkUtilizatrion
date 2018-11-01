@@ -60,7 +60,7 @@ public class YenTopKShortestPathsAlgTest
 		System.out.println(alg.get_shortest_path(graph.get_vertex(0), graph.get_vertex(5)));
 	}
 	
-	@Test
+//	@Test
 	public void testYenShortestPathsAlg()
 	{		
 		System.out.println("Testing batch processing of top-k shortest paths!");
@@ -71,16 +71,16 @@ public class YenTopKShortestPathsAlgTest
 		System.out.println(yenAlg.get_result_list().size());	
 	}
 	
-//	@Test
+	@Test
 	public void testYenShortestPathsAlg2()
 	{
 		System.out.println("Obtain all paths in increasing order! - updated!");
 		YenTopKShortestPathsAlg yenAlg = new YenTopKShortestPathsAlg(
-				graph, graph.get_vertex(4), graph.get_vertex(5));
+				graph, graph.get_vertex(0), graph.get_vertex(5));
 		int i=0;
 		while(yenAlg.has_next())
 		{
-			System.out.println("Path "+i+++" : "+yenAlg.next());
+			System.out.println("Path "+ i++ +" : "+yenAlg.next());
 		}
 		
 		System.out.println("Result # :"+i);
