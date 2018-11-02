@@ -394,4 +394,12 @@ public class Graph implements BaseGraph
 	{
 		return _id_vertex_index.get(id);
 	}
+	
+	/**
+	 * Get the number of edges in the graph
+	 * @return
+	 */
+	public Integer get_edge_num() {
+        return _edge_num;
+    }
 }

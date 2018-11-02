@@ -4,6 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="lib" path="D:/CPLEX_Studio1263/cplex/lib/cplex.jar"/>
+	<classpathentry kind="lib" path="F:/software/CPLex/cplex/lib/cplex.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

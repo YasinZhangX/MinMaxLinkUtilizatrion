@@ -136,11 +136,20 @@ public class Demand implements BaseDemand {
         
         ++_demand_num;
     }
-
+    
+    /**
+     * Get demand list
+     */
     public List<DemandPair<Integer, Integer>> get_demand_list() {
         return _demand_list;
     }
-
+    
+    /**
+     * Get demand value by s-t vertex
+     * @param source BaseVertex
+     * @param sink BaseVertex
+     * @return demandValue
+     */
     public double get_demand(BaseVertex source, BaseVertex sink) {
         return _vertex_pair_demand_index.containsKey(
                 new DemandPair<Integer, Integer>(source.get_id(), sink.get_id()))? 
@@ -149,12 +158,26 @@ public class Demand implements BaseDemand {
                       : 0;
     }
     
+    /**
+     * Get demand value by s-t id
+     * @param source Integer
+     * @param sink Integer
+     * @return demandValue
+     */
     public double get_demand(Integer source, Integer sink) {
         return _vertex_pair_demand_index.containsKey(
                 new DemandPair<Integer, Integer>(source, sink))? 
                         _vertex_pair_demand_index.get(
                                 new DemandPair<Integer, Integer>(source, sink)) 
                       : 0;
+    }
+    
+    /**
+     * Get the number of the damands
+     * @return the number of demand
+     */
+    public int get_demand_num() {
+        return _demand_num;
     }
 
 }

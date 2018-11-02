@@ -1,9 +1,15 @@
 package solution;
 
+import java.util.List;
+
+import alg.control.YenTopKShortestPathsAlg;
 import alg.model.Demand;
+import alg.model.DemandPair;
 import alg.model.Graph;
+import alg.model.Path;
 import alg.model.VariableGraph;
 import ilog.concert.IloException;
+import ilog.concert.IloNumVar;
 import ilog.cplex.IloCplex;
 
 public class MMLUSolution {
@@ -15,8 +21,22 @@ public class MMLUSolution {
     
     public static void main(String[] args) {
         try {
+            YenTopKShortestPathsAlg yenAlg = new YenTopKShortestPathsAlg(graph);
+            
+            Integer numOfEdge = graph.get_edge_num();
+            Integer numOfDemand = demand.get_demand_num();
+            List<DemandPair<Integer, Integer>> demandPairs = demand.get_demand_list();
+            
+            for (DemandPair<Integer, Integer> demandPair : demandPairs) {
+                List<Path> shortest_paths_list = yenAlg.get_shortest_paths(
+                        graph.get_vertex(demandPair.o1), graph.get_vertex(demandPair.o2), 5);
+                System.out.println("Paths:"+shortest_paths_list);
+                System.out.println(yenAlg.get_result_list().size());
+            }
+            
             // Build model
-            IloCplex cplex = new IloCplex();
+            IloCplex  cplex = new IloCplex();
+            IloNumVar[][] Xdp = new IloNumVar[numOfDemand][1];
             
         } catch (IloException e) {
             System.out.println("Concert Error: " + e);
