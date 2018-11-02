@@ -95,6 +95,11 @@ public class Graph implements BaseGraph
 	protected List<BaseVertex> _vertex_list = new Vector<BaseVertex>();
 	
 	/**
+     *  list of edges in the graph 
+     */
+    protected List<Pair<Integer,Integer>> _edge_list = new Vector<Pair<Integer,Integer>>();
+	
+	/**
 	 *  the number of vertices in the graph
 	 */
 	protected int _vertex_num = 0;
@@ -280,6 +285,7 @@ public class Graph implements BaseGraph
 		_vertex_pair_capacity_index.put(
                 new Pair<Integer, Integer>(start_vertex_id, end_vertex_id), 
                 capacity);
+		_edge_list.add(new Pair<Integer, Integer>(start_vertex_id, end_vertex_id));
 		
 		++_edge_num;
 	}
@@ -383,6 +389,14 @@ public class Graph implements BaseGraph
 	{
 		return _vertex_list;
 	}
+	
+	/**
+     * Return the edge list in the graph.
+     */
+    public List<Pair<Integer,Integer>> get_edge_list()
+    {
+        return _edge_list;
+    }
 	
 	/**
 	 * Get the vertex with the input id.
