@@ -110,7 +110,7 @@ public class Demand implements BaseDemand {
                 DemandPair<Integer, Integer> demandPair = new DemandPair<Integer, Integer>(start_vertex_id, end_vertex_id);
                 _demand_list.add(demandPair);
                 _id_demand_index.put(demandPair.get_id(), demandPair);
-                add_demand(start_vertex_id, end_vertex_id, demand);
+                add_demand(start_vertex_id, end_vertex_id, demandPair, demand);
 
                 line = bufRead.readLine();
             }
@@ -123,16 +123,14 @@ public class Demand implements BaseDemand {
     }
 
     
-    protected void add_demand(int start_vertex_id, int end_vertex_id, double demand) {
+    protected void add_demand(int start_vertex_id, int end_vertex_id, DemandPair<Integer,Integer> demandPair, double demand) {
         // actually, we should make sure all vertices ids must be correct. 
         if(start_vertex_id == end_vertex_id)
         {
             throw new IllegalArgumentException("The demand from itself to itself does not allowed.");
         }    
         
-        _vertex_pair_demand_index.put(
-                new DemandPair<Integer, Integer>(start_vertex_id, end_vertex_id), 
-                demand);
+        _vertex_pair_demand_index.put(demandPair, demand);
         
         ++_demand_num;
     }

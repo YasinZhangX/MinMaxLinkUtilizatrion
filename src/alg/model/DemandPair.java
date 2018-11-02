@@ -1,12 +1,14 @@
 package alg.model;
 
+import java.util.List;
+import java.util.Vector;
+
 public class DemandPair<TYPE1, TYPE2> extends Pair<TYPE1, TYPE2> {
     
     private static int CURRENT_DEMAND_PAIR_NUM = 0;
     private int _id = CURRENT_DEMAND_PAIR_NUM++;
-
-    public TYPE1 o1;
-    public TYPE2 o2;
+    
+    private List<Path> _path_list = new Vector<Path>();
     
     public DemandPair(TYPE1 o1, TYPE2 o2) {
         super(o1, o2);
@@ -60,5 +62,24 @@ public class DemandPair<TYPE1, TYPE2> extends Pair<TYPE1, TYPE2> {
     public static void reset()
     {
         CURRENT_DEMAND_PAIR_NUM = 0;
+    }
+    
+    /**
+     * Return the list of paths for this demand
+     * (Note that some of them are duplicates)
+     * @return
+     */
+    public List<Path> get_path_list()
+    {
+        return _path_list;
+    }
+    
+    /**
+     * set the list of paths for this demand
+     * (Note that some of them are duplicates)
+     */
+    public void set_path_list(List<Path> path_list_)
+    {
+        this._path_list = path_list_;
     }
 }
