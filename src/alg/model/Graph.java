@@ -40,6 +40,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -97,7 +98,7 @@ public class Graph implements BaseGraph
 	/**
      *  list of edges in the graph 
      */
-    protected List<Pair<Integer,Integer>> _edge_list = new Vector<Pair<Integer,Integer>>();
+    protected List<Pair<Integer,Integer>> _edge_list = new ArrayList<Pair<Integer,Integer>>();
 	
 	/**
 	 *  the number of vertices in the graph

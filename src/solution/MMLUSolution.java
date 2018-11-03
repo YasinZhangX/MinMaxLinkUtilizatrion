@@ -9,7 +9,6 @@ import alg.model.Graph;
 import alg.model.Pair;
 import alg.model.Path;
 import alg.model.VariableGraph;
-import alg.model.abstracts.BaseVertex;
 import ilog.concert.IloColumn;
 import ilog.concert.IloException;
 import ilog.concert.IloMPModeler;
@@ -36,7 +35,7 @@ public class MMLUSolution {
             // Build model
             IloCplex  cplex = new IloCplex();
             IloNumVar[][] Xdp = new IloNumVar[numOfDemand][];
-            IloNumVar rVar = cplex.numVar(0, Double.MAX_VALUE, IloNumVarType.Float);
+            IloNumVar[] rVar = new IloNumVar[1];
             IloNumVarType varType = IloNumVarType.Int;
             
             for (DemandPair<Integer, Integer> demandPair : demandPairs) {
@@ -56,8 +55,8 @@ public class MMLUSolution {
     }
 
 
-    static void buildModelByColumn(IloMPModeler model, List<DemandPair<Integer, Integer>> demandPairs,
-            IloNumVar[][] xdp, IloNumVar rVar, IloNumVarType type) throws IloException {
+    private void buildModelByColumn(IloMPModeler model, List<DemandPair<Integer, Integer>> demandPairs,
+            IloNumVar[][] xdp, IloNumVar[] rVar, IloNumVarType type) throws IloException {
 
         List<Pair<Integer, Integer>> edges = graph.get_edge_list();
         DemandPair<Integer, Integer> demandPair;
@@ -68,24 +67,23 @@ public class MMLUSolution {
         int i = 0;
         
         // Add target
-        IloObjective utilization = model.addMinimize();
-        
+        IloObjective utilization = model.addMinimize();    
         IloRange[]   constraint  = new IloRange[nEdge];
         
+        IloColumn utilizationColumn = model.column(utilization, 1.0);
         for (Pair<Integer,Integer> pair : edges) {
-            constraint[i++] = model.addRange(-Double.MAX_VALUE, 0);
+            constraint[i] = model.addRange(-Double.MAX_VALUE, 0);
             edgeCapacity = graph.get_edge_capacity(graph.get_vertex(pair.first()), graph.get_vertex(pair.second()));
+            utilizationColumn.and(model.column(constraint[i], -1.0*edgeCapacity));
+            i++;
         }
+        rVar[0] = model.numVar(utilizationColumn, 0, Double.MAX_VALUE, IloNumVarType.Float);
 
-        
-        IloColumn column = model.column(utilization, 1.0);
-
-        
         for(int d = 0; d < nDemand; d++) {
             demandPair = demandPairs.get(d);
             nPath = demandPair.get_path_list().size();
             for(int p = 0; p < nPath; p++) {
-                
+                double[] delta = GetDeltaForDemandPath(demandPair.get_path_list().get(p), edges);
             }
         }
      
@@ -96,5 +94,11 @@ public class MMLUSolution {
 //           }
 //           Buy[j] = model.numVar(col, data.foodMin[j], data.foodMax[j], type);
 //        }
+    }
+
+
+    private double[] GetDeltaForDemandPath(Path path, List<Pair<Integer, Integer>> edges) {
+        List<Pair<Integer, Integer>> linkList = path.get_link_list();
+        return null;
     }
 }

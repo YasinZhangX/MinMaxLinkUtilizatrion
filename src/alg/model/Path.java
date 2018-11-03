@@ -99,4 +99,11 @@ public class Path implements BaseElementWithWeight
 	{
 		return _vertex_list.toString()+":"+_weight;
 	}
+
+    public List<Pair<Integer, Integer>> get_link_list() {
+        List<Pair<Integer, Integer>> linkList = new Vector<>();
+        int nVertex = _vertex_list.size();
+        
+        return null;
+    }
 }
