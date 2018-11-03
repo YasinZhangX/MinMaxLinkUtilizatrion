@@ -8,7 +8,7 @@ public class DemandPair<TYPE1, TYPE2> extends Pair<TYPE1, TYPE2> {
     private static int CURRENT_DEMAND_PAIR_NUM = 0;
     private int _id = CURRENT_DEMAND_PAIR_NUM++;
     
-    private List<Path> _path_list = new Vector<Path>();
+    private List<Path> _path_list;
     
     public DemandPair(TYPE1 o1, TYPE2 o2) {
         super(o1, o2);
@@ -80,6 +80,7 @@ public class DemandPair<TYPE1, TYPE2> extends Pair<TYPE1, TYPE2> {
      */
     public void set_path_list(List<Path> path_list_)
     {
-        this._path_list = path_list_;
+        List<Path> list = new Vector<>(path_list_);
+        this._path_list = list;
     }
 }

@@ -171,6 +171,18 @@ public class Demand implements BaseDemand {
     }
     
     /**
+     * 
+     * @param demandPair
+     * @return
+     */
+    public double get_demand(DemandPair<Integer, Integer> demandPair) {
+        int source = demandPair.first();
+        int sink = demandPair.second();
+        
+        return get_demand(source, sink);
+    }
+    
+    /**
      * Get the number of the damands
      * @return the number of demand
      */
