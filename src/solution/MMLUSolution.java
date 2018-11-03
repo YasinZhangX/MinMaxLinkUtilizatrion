@@ -1,6 +1,9 @@
 package solution;
 
+import java.util.Arrays;
 import java.util.List;
+
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 import alg.control.YenTopKShortestPathsAlg;
 import alg.model.Demand;
@@ -55,7 +58,7 @@ public class MMLUSolution {
     }
 
 
-    private void buildModelByColumn(IloMPModeler model, List<DemandPair<Integer, Integer>> demandPairs,
+    private static void buildModelByColumn(IloMPModeler model, List<DemandPair<Integer, Integer>> demandPairs,
             IloNumVar[][] xdp, IloNumVar[] rVar, IloNumVarType type) throws IloException {
 
         List<Pair<Integer, Integer>> edges = graph.get_edge_list();
@@ -97,8 +100,18 @@ public class MMLUSolution {
     }
 
 
-    private double[] GetDeltaForDemandPath(Path path, List<Pair<Integer, Integer>> edges) {
+    private static double[] GetDeltaForDemandPath(Path path, List<Pair<Integer, Integer>> edges) {
+        
+        int index;
         List<Pair<Integer, Integer>> linkList = path.get_link_list();
-        return null;
+        double[] delta = new double[edges.size()];
+        Arrays.fill(delta, 0);
+        
+        for (Pair<Integer, Integer> link : linkList) {
+            index = edges.indexOf(link);
+            delta[index] = 1.0;
+        }
+        
+        return delta;
     }
 }
