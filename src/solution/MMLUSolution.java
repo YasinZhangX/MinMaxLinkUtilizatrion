@@ -1,10 +1,7 @@
 package solution;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
-
 import alg.control.YenTopKShortestPathsAlg;
 import alg.model.Demand;
 import alg.model.DemandPair;
