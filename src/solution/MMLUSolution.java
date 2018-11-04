@@ -43,7 +43,8 @@ public class MMLUSolution {
             
             for (DemandPair<Integer, Integer> demandPair : demandPairs) {
                 List<Path> shortest_paths_list = yenAlg.get_shortest_paths(graph.get_vertex(demandPair.o1), 
-                                                            graph.get_vertex(demandPair.o2), 5);
+                                                            graph.get_vertex(demandPair.o2), 50);
+                System.out.print(demandPair + ": ");
                 System.out.println("Paths:"+shortest_paths_list);
                 System.out.println(shortest_paths_list.size());
                 demandPair.set_path_list(shortest_paths_list);    // Add the path to the demand pair
@@ -89,6 +90,7 @@ public class MMLUSolution {
         int nEdge = graph.get_edge_num();
         int nDemand = demandPairs.size();
         int i = 0;
+        double[] delta;
         
         // 1 Add target
         IloObjective utilization = model.addMinimize();    
@@ -99,10 +101,11 @@ public class MMLUSolution {
         for (Pair<Integer,Integer> pair : edges) {
             constraint[i] = model.addRange(-Double.MAX_VALUE, 0);
             edgeCapacity = graph.get_edge_capacity(graph.get_vertex(pair.first()), graph.get_vertex(pair.second()));
-            utilizationColumn.and(model.column(constraint[i], -1.0*edgeCapacity));
+            utilizationColumn = utilizationColumn.and(model.column(constraint[i], -1.0*edgeCapacity));
+            constraint[i].setName("E"+i);
             i++;
         }
-        rVar[0] = model.numVar(utilizationColumn, 0, Double.MAX_VALUE, IloNumVarType.Float);
+        rVar[0] = model.numVar(utilizationColumn, 0.0, Double.MAX_VALUE, IloNumVarType.Float, "r");
         
         // 3 process Xdp
         for(int d = 0; d < nDemand; d++) {
@@ -110,19 +113,21 @@ public class MMLUSolution {
             demandPair = demandPairs.get(d);
             nPath = demandPair.get_path_list().size();
             for(int p = 0; p < nPath; p++) {
-                double[] delta = GetDeltaForDemandPath(demandPair.get_path_list().get(p), edges);
+                delta = GetDeltaForDemandPath(demandPair.get_path_list().get(p), edges);
                 IloColumn column = model.column(utilization, 0.0);
                 for (int e = 0; e < nEdge; e++) {
                     column = column.and(model.column(constraint[e], delta[e]));
                 }
-                xdp[d][p] = model.numVar(column, 0.0, 1.0, type);
+                xdp[d][p] = model.numVar(column, 0.0, 1.0, type, "x"+d+p);
             }
             
             // 3.2 Constraint 1 --- Add by Row
-            double demandValue = demand.get_demand(demandPair);
-            double[] demandValueArray = new double[nPath];
-            Arrays.fill(demandValueArray, demandValue);
-            model.addEq(model.scalProd(xdp[d], demandValueArray), demandValue);
+            if (nPath != 0) {
+                double demandValue = demand.get_demand(demandPair);
+                double[] demandValueArray = new double[nPath];
+                Arrays.fill(demandValueArray, demandValue);
+                model.addEq(model.scalProd(xdp[d], demandValueArray), demandValue, "D"+d);
+            } 
         }
     }
 
